@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IoIosMenu } from "react-icons/io";
+import { IoIosClose, IoIosMenu } from "react-icons/io";
 import Link from 'next/link'
 
 export default function Menu() {
@@ -12,7 +12,7 @@ export default function Menu() {
   return (
     <>
       <button onClick={()=> setOpen(prev => !prev)} className="sm:hidden">
-        <IoIosMenu size={30} />
+        {open ? <IoIosClose size={35} /> : <IoIosMenu size={30} />}
       </button>
       
       {open && (
