@@ -19,7 +19,16 @@ export default function NavIcons() {
     return (
         <div className='hidden sm:flex gap-4 relative'>
             {icons.map((ic, index)=> {
-                const fun = ()=> ic.fun === "profile" ? setIsProfileOpen(prev => !prev) : ic.fun === "cart" ? setIsCartOpen(prev => !prev) : null 
+                const fun = ()=> {
+                    if(!ic.fun) return
+                    if(ic.fun === "profile"){
+                        setIsProfileOpen(prev => !prev) 
+                        if(isCartOpen) setIsCartOpen(false) 
+                    } else {
+                        setIsCartOpen(prev => !prev) 
+                        if(isProfileOpen) setIsProfileOpen(false)
+                    }
+                } 
                 return(
                     <button key={index} className={`${btnStyle} ${ic.fun === 'cart' ? '' : ' hover:border hover:p-[7.2px] hover:border-primary'}`} onClick={fun}>
                         {ic.icon}
