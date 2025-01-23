@@ -49,7 +49,6 @@ export default function Slider() {
             >
                 {slides.map(slide => {
                     return(
-                        
                         <div key={slide.id} className={`${slide.bg} flex flex-col gap-16 md:flex-row w-screen h-full`}>
                             <div className="h-1/2 md:h-full md:w-1/2 flex flex-col items-center justify-center gap-8 text-center">
                                 <h2 className="font-medium text-xl md:text-2xl lg:text-3xl 2xl:text-5xl">{slide.description}</h2>
