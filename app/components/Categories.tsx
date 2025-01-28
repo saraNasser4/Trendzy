@@ -11,8 +11,8 @@ export default function Categories() {
         { id: 5, title: "Accesories", image: "" },
     ]
     return (
-        <div className="my-24 px-4 md:px-8 ">
-            <h2 className="mx-auto max-w-[1550px] w-full font-medium text-xl md:text-2xl lg:text-3xl 2xl:text-5xl">Categories</h2>
+        <div className="my-24">
+            <h2 className="mx-auto px-4 md:px-8 max-w-[1550px] w-full font-medium text-xl md:text-2xl lg:text-3xl 2xl:text-5xl">Categories</h2>
             <div className="overflow-x-scroll mt-8 scrollbar-hidden">
                 <div className="flex gap-8">
                     {categoriesList.map(category => {
