@@ -13,7 +13,7 @@ export default function Footer() {
 
   return (
     <footer className='bg-zinc-900'>
-      <div className='py-24 mx-auto px-4 md:px-8 max-w-[1550px] w-full grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
+      <div className='[&>*]:py-3 py-20 mx-auto px-4 md:px-8 max-w-[1550px] w-full grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
         <div className='flex flex-col gap-4'>
           <Link href="/" className='mb-8'>
             <Image src='/logo.png' width={160} height={18} alt='logo' priority={true} />
@@ -32,7 +32,7 @@ export default function Footer() {
               <div key={ind} className='flex flex-col gap-4'>
                 <h3 className='mb-8 font-medium text-[18px] md:text-xl lg:text-3xl uppercase'>{list.title}</h3>
                 <ul>
-                  {list.items.map((item, i)=> <li key={i}>{item}</li>)}
+                  {list.items.map((item, i)=> <li className='py-2' key={i}>{item}</li>)}
                 </ul>
               </div>
             )
@@ -46,8 +46,22 @@ export default function Footer() {
             <input className="w-full px-3 py-2 rounded" type="text" placeholder='Email Address' />
             <button className='absolute -right-2 bg-primary rounded-e px-5 py-2'>Join</button>
           </div>
+          <h4 className='my-4 font-medium sm:text-[18px] lg:text-2xl'>Service Paymants</h4>
+          <div className='flex gap-4'>
+            <Image width={50} height={50} src="/images/visa.svg" alt="visa logo"/>
+            <Image width={50} height={50} src="/images/mastercard.svg" alt="mastercard logo"/>
+            <Image width={50} height={50} src="/images/paypal.svg" alt="paypal logo"/>
+            <Image width={50} height={50} src="/images/applepay.svg" alt="apple pay logo"/>
+          </div>
         </div>
+      </div>
 
+      <div className='flex flex-col gap-5 md:flex-row justify-between items-center pb-8 mx-auto px-4 md:px-8 max-w-[1550px] w-full'>
+          <p>&copy; 2025 Trendzy shop</p>
+          <div className='flex gap-5 flex-col items-center sm:flex-row'>
+            <p><span className='font-bold text-[18px] text-zinc-500'>Langauge</span> United States | English</p>
+            <p><span className='font-bold text-[18px] text-zinc-500'>Currency</span> $ USD</p>
+          </div>
       </div>
     </footer>
   )
