@@ -20,7 +20,7 @@ export default function Product() {
                     sizes="25vw" 
                 />
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between sm:text-xl">
                 <h4>Product Name</h4>
                 <span>$45</span>
             </div>
@@ -43,7 +43,7 @@ export default function Product() {
                     sizes="25vw" 
                 />
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between sm:text-xl">
                 <h4>Product Name</h4>
                 <span>$45</span>
             </div>

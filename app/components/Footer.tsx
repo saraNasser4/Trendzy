@@ -32,7 +32,7 @@ export default function Footer() {
               <div key={ind} className='flex flex-col gap-4'>
                 <h3 className='mb-8 font-medium text-[18px] md:text-xl lg:text-3xl uppercase'>{list.title}</h3>
                 <ul>
-                  {list.items.map((item, i)=> <li className='py-2' key={i}>{item}</li>)}
+                  {list.items.map((item, i)=> <li className='my-4 cursor-pointer' key={i}>{item}</li>)}
                 </ul>
               </div>
             )
