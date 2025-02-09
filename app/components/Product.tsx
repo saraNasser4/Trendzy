@@ -10,14 +10,14 @@ export default function Product() {
                     src="https://images.pexels.com/photos/20684681/pexels-photo-20684681/free-photo-of-a-close-up-of-a-flower-on-a-branch.jpeg?auto=compress&cs=tinysrgb&w=80&lazy=load" 
                     alt="product image" 
                     fill 
-                    sizes="25vw" 
+                    sizes="250vw" 
                     className="absolute object-cover rounded-md z-10 hover:opacity-0 transition-opacity duration-500"
                 />
                 <Image 
                     src="https://images.pexels.com/photos/20684681/pexels-photo-20684681/free-photo-of-a-close-up-of-a-flower-on-a-branch.jpeg?auto=compress&cs=tinysrgb&w=80&lazy=load" 
                     alt="product image" 
                     fill 
-                    sizes="25vw" 
+                    sizes="250vw" 
                 />
             </div>
             <div className="flex justify-between sm:text-xl">
@@ -33,14 +33,14 @@ export default function Product() {
                     src="https://images.pexels.com/photos/20684681/pexels-photo-20684681/free-photo-of-a-close-up-of-a-flower-on-a-branch.jpeg?auto=compress&cs=tinysrgb&w=80&lazy=load" 
                     alt="product image" 
                     fill 
-                    sizes="25vw" 
+                    sizes="250vw" 
                     className="absolute object-cover rounded-md z-10 hover:opacity-0 transition-opacity duration-500"
                 />
                 <Image 
                     src="https://images.pexels.com/photos/20684681/pexels-photo-20684681/free-photo-of-a-close-up-of-a-flower-on-a-branch.jpeg?auto=compress&cs=tinysrgb&w=80&lazy=load" 
                     alt="product image" 
                     fill 
-                    sizes="25vw" 
+                    sizes="250vw" 
                 />
             </div>
             <div className="flex justify-between sm:text-xl">
