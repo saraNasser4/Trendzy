@@ -43,7 +43,7 @@ export default function CustomizeProduct() {
         {sizeAvail.map((size, ind)=> {
           return (
             <li key={ind} onClick={() =>chooseSizeHandler(size, ind)} className={`relative rounded-xl ${size.available ? 'cursor-pointer' : 'cursor-not-allowed'}`}>
-              <span className={`text-[17px] py-2 px-4 rounded-xl border ${size.available && chosenSize === ind ? 'border-primary text-primary' : !size.available ? 'bg-[#A3C8FF]' : 'bg-primary border-primary'}`}>{size.size}</span>
+              <span className={`text-[17px] py-2 px-4 rounded-xl border ${size.available && chosenSize === ind ? 'border-primary text-primary' : !size.available ? 'bg-light-blue' : 'bg-primary border-primary'}`}>{size.size}</span>
             </li>
           )
         })}
