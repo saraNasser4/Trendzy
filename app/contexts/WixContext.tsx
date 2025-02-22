@@ -1,23 +1,31 @@
 'use client'
-
 import { createClient, OAuthStrategy } from "@wix/sdk";
-import { products, collections } from "@wix/stores"
+import { members } from "@wix/members";
+import { useEffect, createContext, ReactNode } from "react";
+import Cookies from "js-cookie";
+
 
 const myWixClient = createClient({
-    modules: {
-      products,
-    },
-    auth: OAuthStrategy({
-      clientId: "<YOUR_CLIENT_ID>",
-      tokens: {
-        accessToken: {
-          value: "<ACCESS_TOKEN_VALUE>",
-          expiresAt: "<ACCESS_TOKEN_EXPIRY_DATE>",
-        },
-        refreshToken: {
-          value: "<REFRESH_TOKEN_VALUE>",
-        },
-      },
-    }),
-  });
-  
+  modules: { members },
+  auth: OAuthStrategy({
+    clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID || "",
+  }),
+});
+
+export type WixClient = typeof myWixClient;
+export const WixClientContext = createContext(myWixClient)
+
+
+export const WixContextProvider = ({children}: { children: ReactNode })=> {
+  useEffect(()=> {
+    const session = Cookies.get("session")
+    if(session) myWixClient.auth.setTokens(JSON.parse(session))
+  }, [])
+
+  return (
+    <WixClientContext.Provider value={myWixClient}>
+      {children}
+    </WixClientContext.Provider>
+  )
+}
+
