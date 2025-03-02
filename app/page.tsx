@@ -1,12 +1,13 @@
 'use client'
-import { useContext, useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 import Categories from "./components/Categories";
 import ProductList from "./components/ProductList";
 import Slider from "./components/Slider";
-import { WixClientContext } from "./contexts/WixContext";
+import useWixClient from "./hooks/useWixClient";
 
 export default function Home() {
-  const myWixClient = useContext(WixClientContext)
+  const myWixClient = useWixClient()
   // console.log("Auth tokens:", myWixClient.auth.getTokens());
   const [productList, setProductList] = useState<Array[]>([])
   // const [cart, setCart] = useState({})
