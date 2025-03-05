@@ -14,7 +14,7 @@ export default async function Product({ categoryId, limit }: { categoryId: strin
         <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap mt-10">
             {itemsList.map(item => {
                 return(
-                    <Link key={item.name} href="/test" className="w-full flex flex-col gap-4 sm:w-[46%] lg:w-[22%]">
+                    <Link key={item.name} href={`/${item.slug}`} className="w-full flex flex-col gap-4 sm:w-[46%] lg:w-[22%]">
                         <div className="relative w-full h-80">
                             <Image 
                                 src={item.media?.items?.[0]?.image?.url || 'https://placehold.co/600x400'} 

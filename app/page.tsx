@@ -36,10 +36,12 @@ export default async function Home() {
   return (
     <main>
       <Slider />
-      <Suspense>
+      <Suspense fallback="loading">
         <ProductList categoryId= {categoryId} limit={4} />
       </Suspense>
-      <Categories />
+      <Suspense fallback="loading">
+        <Categories />
+      </Suspense>
     </main>
   );
 }
