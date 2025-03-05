@@ -1,15 +1,16 @@
 // import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import Categories from "./components/Categories";
 import ProductList from "./components/ProductList";
 import Slider from "./components/Slider";
 // import useWixClient from "./hooks/useWixClient";
-import wixServer from "./lib/wixServer";
+// import wixServer from "./lib/wixServer";
 
 export default async function Home() {
-  const myWixServer = await wixServer()
+  // const myWixServer = await wixServer()
 
-  const res = await myWixServer.products.queryProducts().find();
-  console.log(res)
+  // const res = await myWixServer.products.queryProducts().find();
+  // console.log(res)
   // const myWixClient = useWixClient()
   // console.log("Auth tokens:", myWixClient.auth.getTokens());
   // const [productList, setProductList] = useState<Array[]>([])
@@ -31,10 +32,13 @@ export default async function Home() {
   // }, [myWixClient])
 
   // console.log(productList)
+  const categoryId = process.env.FEATURED_PRODUCTS_CATEGORY_ID || ""
   return (
     <main>
       <Slider />
-      <ProductList />
+      <Suspense>
+        <ProductList categoryId= {categoryId} limit={4} />
+      </Suspense>
       <Categories />
     </main>
   );
