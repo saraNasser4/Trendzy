@@ -2,8 +2,16 @@ import Image from 'next/image'
 import React from 'react'
 import Product from '../components/Product'
 import Filter from '../components/Filter'
+import wixServer from '../lib/wixServer'
 
-export default function List() {
+export default async function ListPage({ searchParams }: { searchPrams: string }) {
+  const myWixServer = await wixServer()
+  const searchParamsCat = await searchParams.cat
+  const res = await myWixServer.collections.getCollectionBySlug(searchParamsCat || 'all-products')
+  const collection = res.collection;
+  
+  
+  const categoryId = collection?._id || ""
   return (
     <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full '>
       <div className='relative mb-20'>
@@ -18,7 +26,7 @@ export default function List() {
 
       <div className='my-8'>
         <h3 className='font-semibold text-[18px] sm:text-xl lg:text-2xl 2xl:text-3xl'>All Products For You!</h3>
-        <Product />
+        <Product categoryId={categoryId} limit={4}/>
       </div>
     </main>
   )

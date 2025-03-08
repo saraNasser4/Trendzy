@@ -1,10 +1,7 @@
-// import { useEffect, useState } from "react";
 import { Suspense } from "react";
 import Categories from "./components/Categories";
 import ProductList from "./components/ProductList";
 import Slider from "./components/Slider";
-// import useWixClient from "./hooks/useWixClient";
-// import wixServer from "./lib/wixServer";
 
 export default async function Home() {
   // const myWixServer = await wixServer()
