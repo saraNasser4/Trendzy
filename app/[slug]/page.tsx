@@ -1,39 +1,43 @@
 import ProductImages from "../components/ProductImages";
 import CustomizeProduct from "../components/CustomizeProduct";
 import AddProduct from "../components/AddProduct";
+import wixServer from "../lib/wixServer";
+import { notFound } from "next/navigation";
 
-export default function SinglePage() {
-  const productDetails = [
-    { title: 'Title', info: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione laboriosam accusamus, amet quam quae molestiae architecto dolores molestias veniam nihil asperiores officiis nobis dolor tempore similique consequuntur neque labore quaerat!' },
-    { title: 'Title', info: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione laboriosam accusamus, amet quam quae molestiae architecto dolores molestias veniam nihil asperiores officiis nobis dolor tempore similique consequuntur neque labore quaerat!' },
-    { title: 'Title', info: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione laboriosam accusamus, amet quam quae molestiae architecto dolores molestias veniam nihil asperiores officiis nobis dolor tempore similique consequuntur neque labore quaerat!' },
-  ]
+export default async function SinglePage({ params }: { params: { slug: string } }) {
+  const myWixServer = await wixServer()
+  
+  const resolvedParams = await params
+  const paramsSlug = resolvedParams.slug
+
+  const products = await myWixServer.products.queryProducts().eq("slug", paramsSlug).find();
+  
+  if(!products.items) return notFound()
+  const product = products.items[0];
+  console.log(product.media?.items)
 
   return (
-    <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full flex flex-col lg:flex-row gap-8'>
+    <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
       <div>
-        <ProductImages />
+        <ProductImages productMedia={product.media?.items} />
       </div>
-      <div>
-        <h3 className="font-medium text-xl md:text-2xl lg:text-3xl my-4">Product Name</h3>
-        <p className="text-zinc-500 text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto sed obcaecati unde atque eum illo incidunt nihil repellat nesciunt, id accusamus ab, animi sequi dolorem laboriosam aliquid soluta voluptas itaque.</p>
+      <div className="xl:col-span-2">
+        <h3 className="font-semibold text-xl md:text-2xl lg:text-3xl my-4">{product.name}</h3>
+        <p className="text-zinc-500 text-sm">{product.description}</p>
         <div className="my-6 text-[17px] md:text-[18px] lg:text-xl flex items-center gap-6">
-          <p className="line-through text-zinc-500">$ 45</p>
-          <p className="text-primary">$ 41.5</p>
+          {product.ribbon === "Sale" && <p className="line-through text-zinc-500">{product.price?.currency} {product.price?.price}</p>}
+          <p className="text-primary">{product.price?.currency} {product.ribbon === "Sale" ? product.price?.discountedPrice : product.price?.price}</p>
         </div>
         <CustomizeProduct />
         <AddProduct />
-        {productDetails.map((detail, index)=> {
+        {product?.additionalInfoSections?.map((detail, index)=> {
           return(
-            <div key={index} className="my-3">
-              <h4 className="font-medium text-[18px] md:text-xl mb-2">{detail.title}</h4>
-              <p className="text-zinc-400">{detail.info}</p>
+            <div key={index} className="my-5">
+              <h4 className="font-medium text-[18px] md:text-xl my-2 capitalize">{detail.title?.toLocaleLowerCase()}</h4>
+              <p className="text-zinc-400">{detail.description}</p>
             </div>
           )
         })}
-        <div>
-          <h4></h4>
-        </div>
       </div>
     </main>
   )

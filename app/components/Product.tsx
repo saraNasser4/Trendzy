@@ -4,7 +4,7 @@ import wixServer from "../lib/wixServer";
 
 const PRODUCT_PER_PAGE: number = 20
 
-export default async function Product({ categoryId, limit }: { categoryId: string, limit: number}) {
+export default async function Product({ categoryId, limit, searchParams }: { categoryId: string, limit?: number, searchParams?: { cat: string }  }) {
     const myWixServer = await wixServer()
     const res = await myWixServer.products.queryProducts().eq("collectionIds", categoryId).limit(limit || PRODUCT_PER_PAGE).find();
     const itemsList = res.items;
