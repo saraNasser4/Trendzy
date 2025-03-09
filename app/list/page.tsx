@@ -4,14 +4,17 @@ import Product from '../components/Product'
 import Filter from '../components/Filter'
 import wixServer from '../lib/wixServer'
 
-export default async function ListPage({ searchParams }: { searchPrams: string }) {
+export default async function ListPage({ searchParams }: { searchParams: { cat: string } }) {
   const myWixServer = await wixServer()
-  const searchParamsCat = await searchParams.cat
+
+  const resolvedSearchParams = await searchParams
+  const searchParamsCat = resolvedSearchParams.cat
+  
   const res = await myWixServer.collections.getCollectionBySlug(searchParamsCat || 'all-products')
   const collection = res.collection;
   
+  const categoryId = collection?._id ||  "00000000-000000-000000-000000000001"
   
-  const categoryId = collection?._id || ""
   return (
     <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full '>
       <div className='relative mb-20'>
