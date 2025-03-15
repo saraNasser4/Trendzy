@@ -1,10 +1,15 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 
-export default function AddProduct() {
+export default function AddProduct({ productQuantity }: { productQuantity : number }) {
   const [quantity, setQuantity] = useState(1)
-  const total = 6;
+  const total = productQuantity || 0;
+
+  
+  useEffect(()=> {
+    if(total < 1) setQuantity(0)
+  }, [])
 
   return (
     <section className='my-4'>
@@ -16,7 +21,10 @@ export default function AddProduct() {
             <span>{quantity}</span>
             <button onClick={()=> setQuantity(prev=> prev < total ? prev + 1 : total)}><FaPlus /></button>
           </div>
-          <p>Only <span className='text-primary'>{total} {total > 1 ? 'items' : 'item'}</span> left!<br /> Don&apos;t miss it</p>
+          { total < 1 ? 
+            <p>All wen for legends</p> :
+            <p>Only <span className='text-primary'>{total} {total > 1 ? 'items' : 'item'}</span> left!<br /> Don&apos;t miss it</p>
+          }
         </div>
         <button className='text-sm rounded-xl px-4 py-2 ring-1 ring-primary text-primary transition-all duration-200 hover:text-white hover:bg-primary disabled:cursor-not-allowed disabled:text-white disabled:bg-light-blue'>Add to Cart</button>
       </div>

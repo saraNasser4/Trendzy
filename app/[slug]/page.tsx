@@ -14,13 +14,17 @@ export default async function SinglePage({ params }: { params: { slug: string } 
   
   if(!products.items) return notFound()
   const product = products.items[0];
-  console.log(product.media?.items)
+
+  const productQuantity = product.variants?.[0].stock?.quantity
+  console.log(product, productQuantity)
 
   return (
     <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
+      
       <div>
         <ProductImages productMedia={product.media?.items} />
       </div>
+      
       <div className="xl:col-span-2">
         <h3 className="font-semibold text-xl md:text-2xl lg:text-3xl my-4">{product.name}</h3>
         <p className="text-zinc-500 text-sm">{product.description}</p>
@@ -29,7 +33,7 @@ export default async function SinglePage({ params }: { params: { slug: string } 
           <p className="text-primary">{product.price?.currency} {product.ribbon === "Sale" ? product.price?.discountedPrice : product.price?.price}</p>
         </div>
         <CustomizeProduct />
-        <AddProduct />
+        <AddProduct productQuantity={productQuantity} />
         {product?.additionalInfoSections?.map((detail, index)=> {
           return(
             <div key={index} className="my-5">
