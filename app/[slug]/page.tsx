@@ -16,7 +16,9 @@ export default async function SinglePage({ params }: { params: { slug: string } 
   const product = products.items[0];
 
   const productQuantity = product.variants?.[0].stock?.quantity
-  console.log(product, productQuantity)
+  console.log(product)
+  console.log(product.productOptions)
+
 
   return (
     <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
@@ -32,8 +34,8 @@ export default async function SinglePage({ params }: { params: { slug: string } 
           {product.ribbon === "Sale" && <p className="line-through text-zinc-500">{product.price?.currency} {product.price?.price}</p>}
           <p className="text-primary">{product.price?.currency} {product.ribbon === "Sale" ? product.price?.discountedPrice : product.price?.price}</p>
         </div>
-        <CustomizeProduct />
-        <AddProduct productQuantity={productQuantity} />
+        <CustomizeProduct productOptions={product?.productOptions || {}}/>
+        <AddProduct productQuantity={productQuantity || 0} />
         {product?.additionalInfoSections?.map((detail, index)=> {
           return(
             <div key={index} className="my-5">

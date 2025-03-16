@@ -9,7 +9,7 @@ export default function AddProduct({ productQuantity }: { productQuantity : numb
   
   useEffect(()=> {
     if(total < 1) setQuantity(0)
-  }, [])
+  }, [total])
 
   return (
     <section className='my-4'>
