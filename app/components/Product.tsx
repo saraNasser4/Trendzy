@@ -4,15 +4,32 @@ import wixServer from "../lib/wixServer";
 
 const PRODUCT_PER_PAGE: number = 20
 
-export default async function Product({ categoryId, limit, searchParams }: { categoryId: string, limit?: number, searchParams?: { cat: string }  }) {
+export default async function Product({ categoryId, limit, searchParams }: { categoryId: string, limit?: number, searchParams?: Promise<{ name: string, type: string, min: string, max: string, sort: string }>  }) {
     const myWixServer = await wixServer()
-    const res = await myWixServer.products.queryProducts().eq("collectionIds", categoryId).limit(limit || PRODUCT_PER_PAGE).find();
-    const itemsList = res.items;
+    const resolvedSearchParams = await searchParams
     
+    // const searchType = await searchParams?.type
+    const productQuery = myWixServer.products
+                                 .queryProducts()
+                                 .startsWith("name", resolvedSearchParams?.name || "")
+                                 .eq("collectionIds", categoryId)
+                                .gt("priceData.price", Number(resolvedSearchParams?.min) || 0)
+                                .lt("priceData.price", Number(resolvedSearchParams?.max) || 100000)
+                                .limit(limit || PRODUCT_PER_PAGE)
+                                
+    if(resolvedSearchParams?.sort) {
+        const [sortType, sortBy] = resolvedSearchParams?.sort?.split(" ") ?? []
+        
+        if(sortType === "asc" && sortBy) productQuery.ascending(sortBy);
+        if(sortType === "desc" && sortBy) productQuery.descending(sortBy);
+    }
+    
+    const res = await productQuery.find()
+    const itemsList = res.items;
 
     return (
         <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap mt-10">
-            {itemsList.map(item => {
+            {itemsList.length > 0 ? itemsList.map(item => {
                 return(
                     <Link key={item.name} href={`/${item.slug}`} className="w-full flex flex-col gap-4 sm:w-[46%] lg:w-[22%]">
                         <div className="relative w-full h-80">
@@ -38,7 +55,9 @@ export default async function Product({ categoryId, limit, searchParams }: { cat
                         <button className="text-sm text-primary border border-primary w-max py-2 px-3 rounded-2xl hover:bg-primary hover:text-white">Add to Cart</button>
                     </Link>
                 )
-            })}
+            }):
+                <p>There aren&apos;t any Products</p>
+            }
         </div>
     )
 }
