@@ -8,7 +8,6 @@ export default async function Product({ categoryId, limit, searchParams }: { cat
     const myWixServer = await wixServer()
     const resolvedSearchParams = await searchParams
     
-    // const searchType = await searchParams?.type
     const productQuery = myWixServer.products
                                  .queryProducts()
                                  .startsWith("name", resolvedSearchParams?.name || "")
@@ -17,16 +16,19 @@ export default async function Product({ categoryId, limit, searchParams }: { cat
                                 .lt("priceData.price", Number(resolvedSearchParams?.max) || 100000)
                                 .limit(limit || PRODUCT_PER_PAGE)
                                 
+    let response;
+
     if(resolvedSearchParams?.sort) {
         const [sortType, sortBy] = resolvedSearchParams?.sort?.split(" ") ?? []
         
-        if(sortType === "asc" && sortBy) productQuery.ascending(sortBy);
-        if(sortType === "desc" && sortBy) productQuery.descending(sortBy);
+        if(sortType === "asc" && sortBy) response = await productQuery.ascending(sortBy).find();
+        if(sortType === "desc" && sortBy) response = await productQuery.descending(sortBy).find();
+    } else{
+        response =  await productQuery.find()
     }
     
-    const res = await productQuery.find()
-    const itemsList = res.items;
-
+    const itemsList = response.items;
+    
     return (
         <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap mt-10">
             {itemsList.length > 0 ? itemsList.map(item => {
