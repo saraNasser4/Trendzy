@@ -29,7 +29,7 @@ export default async function ListPage({ searchParams }: { searchParams: { cat: 
 
       <div className='my-8'>
         <h3 className='font-semibold text-[18px] sm:text-xl lg:text-2xl 2xl:text-3xl'>All Products For You!</h3>
-        <Product categoryId={categoryId} searchParams={searchParams} />
+        <Product categoryId={categoryId} searchParams={searchParams} paginationAppear={true} />
       </div>
     </main>
   )

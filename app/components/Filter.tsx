@@ -22,7 +22,7 @@ export default function Filter() {
   ]
 
   const selectStyle ="rounded-2xl bg-zinc-900 px-3 py-2 outline-none w-28"
-  const inputStyle ="rounded-2xl px-3 py-2 outline-none w-28 font-semibold bg-zinc-400 placeholder:text-zinc-900 text-zinc-900`"
+  const inputStyle ="rounded-2xl px-3 py-2 outline-none w-28 font-semibold bg-zinc-400 placeholder:text-zinc-900 text-zinc-900"
   return (
     <div className="flex justify-between items-center gap-10">
         <div className="flex flex-wrap gap-6">

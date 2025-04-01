@@ -5,14 +5,14 @@ import Pagination from "./Pagination";
 
 const PRODUCT_PER_PAGE: number = 6
 
-export default async function Product({ categoryId, limit, searchParams }: { categoryId: string, limit?: number, searchParams?: Promise<{ name: string, type: string, min: string, max: string, sort: string, page: string }>  }) {
+export default async function Product({ categoryId, limit, searchParams, paginationAppear }: { categoryId: string, limit?: number, searchParams?: Promise<{ name: string, type: string, min: string, max: string, sort: string, page: string }>, paginationAppear: boolean }) {
     const myWixServer = await wixServer()
     const resolvedSearchParams = await searchParams
     
     const productQuery = myWixServer.products
-                                 .queryProducts()
-                                 .startsWith("name", resolvedSearchParams?.name || "")
-                                 .eq("collectionIds", categoryId)
+                                .queryProducts()
+                                .startsWith("name", resolvedSearchParams?.name || "")
+                                .eq("collectionIds", categoryId)
                                 .gt("priceData.price", Number(resolvedSearchParams?.min) || 0)
                                 .lt("priceData.price", Number(resolvedSearchParams?.max) || 100000)
                                 .limit(limit || PRODUCT_PER_PAGE)
@@ -31,9 +31,7 @@ export default async function Product({ categoryId, limit, searchParams }: { cat
         response =  await productQuery.find()
     }
     
-    const itemsList = response?.items;
-
-    console.log('hi', response)
+    const itemsList = response?.items
     
     return (
         <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap mt-10">
@@ -66,7 +64,7 @@ export default async function Product({ categoryId, limit, searchParams }: { cat
                         </Link>
                     )}
                     
-                    <Pagination currentPage={response?.currentPage || 0} hasPrev={response?.hasPrev()} hasNext={response?.hasNext()} />
+                    {paginationAppear && <Pagination currentPage={response?.currentPage || 0} hasPrev={response?.hasPrev()} hasNext={response?.hasNext()} />}
                 </>
             : <p>There aren&apos;t any Products</p>
             }
