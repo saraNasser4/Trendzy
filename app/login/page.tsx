@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import useWixClient from "../hooks/useWixClient"
 
 enum MODE {
   LOGIN = "LOGIN",
@@ -11,9 +12,17 @@ enum MODE {
 
 export default function Login() {
   const [mode, setMode] = useState(MODE.EMAIL_VERFICATION)
-
   
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [emailCode, setEmailCode] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [message, setMessage] = useState("")
 
+  const wixClient = useWixClient()
+  
   const inputStyle ="rounded-md px-3 py-2 outline-none placeholder:text-zinc-500 text-zinc-900"
 
   return (

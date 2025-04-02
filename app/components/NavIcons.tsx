@@ -8,6 +8,7 @@ import CartModal from './CartModal'
 export default function NavIcons() {
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [isCartOpen, setIsCartOpen] = useState(false)
+    const [isLoggin, setIsLoggin] = useState(true)
 
     const btnStyle = 'relative cursor-pointer p-2 rounded-full transition-colors duration-200  hover:text-primary'
     const icons = [
@@ -30,18 +31,18 @@ export default function NavIcons() {
                     }
                 } 
                 return(
-                    <button key={index} className={`${btnStyle} ${ic.fun === 'cart' ? '' : ' hover:border hover:p-[7.2px] hover:border-primary'}`} onClick={fun}>
+                    <Link href={!isLoggin && ic.fun === "profile" ? '/login' :'/'} key={index} className={`${btnStyle} ${ic.fun === 'cart' ? '' : ' hover:border hover:p-[7.2px] hover:border-primary'}`} onClick={fun}>
                         {ic.icon}
                         {ic.fun === 'cart' && <span className='absolute -top-1 bg-red-600 !transition-none text-white px-1.5 rounded-full z-[-1]'>2</span>}
-                    </button> 
+                    </Link> 
                 )
             })}
 
-            {isProfileOpen && 
-                <div className='absolute top-12 left-4 flex flex-col gap-4 bg-zinc-800 rounded-xl p-4 shadow-xl z-20'>
+            {(isProfileOpen && isLoggin) && 
+                <div className='absolute top-12 left-4 flex flex-col gap-4 bg-zinc-800 rounded-xl p-4 shadow-xl z-20 min:w-30 [&>*]:text-start'>
                     <span className='absolute border-[14px] border-b-zinc-800 border-x-transparent border-t-transparent -top-[26px] right-2'></span>
-                    <Link href="/">Profile</Link>
-                    <Link href='/'>Logout</Link>
+                    <p><span className='text-primary font-medium text-[18px]'>Hi!</span> Friend</p>
+                    <button onClick={()=> setIsLoggin(prev => !prev)}>Logout</button>
                 </div>
             }
 
