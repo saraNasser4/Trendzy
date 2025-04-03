@@ -5,7 +5,7 @@ import { IoIosClose, IoIosMenu } from "react-icons/io";
 import Link from 'next/link'
 
 export default function Menu() {
-  const listItems = ['homePage', 'shop', 'deals', 'about', 'contact', 'logout']
+  const listItems = ['homePage', 'shop', 'deals', 'about', 'contact']
   const listMap = listItems.map((item, index)=> <Link onClick={()=> setOpen(false)} key={index} href={`/${index < 1 ? '' : item}`} className="hover:text-primary text-[18px]">{item}</Link>)
   const [open, setOpen] = useState(false)
   
