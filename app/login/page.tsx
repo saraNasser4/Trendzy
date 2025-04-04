@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import useWixClient from "../hooks/useWixClient"
 import { LoginState } from "@wix/sdk"
 import Cookies from "js-cookie"
@@ -19,10 +19,9 @@ export default function Login() {
   const router = useRouter()
   const isLoggedIn = wixClient.auth.loggedIn()
 
-  if (isLoggedIn) router.push("/")
   console.log(isLoggedIn)
 
-  const [mode, setMode] = useState(MODE.EMAIL_VERFICATION)
+  const [mode, setMode] = useState(MODE.LOGIN)
   
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
@@ -37,6 +36,7 @@ export default function Login() {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+    setMessage("")
 
     try {
       let response;
@@ -49,7 +49,8 @@ export default function Login() {
           response = await wixClient.auth.register({ email, password, profile: { nickname: username } })
           break;
         case MODE.RESET_PASSWORD:
-          response = await wixClient.auth.sendPasswordResetEmail({ email, redirectUri: pathName })
+          response = await wixClient.auth.sendPasswordResetEmail(email, pathName)
+          setMessage("Password reset email sent. Please check your email")
           break;
         case MODE.EMAIL_VERFICATION:
           response = await wixClient.auth.processVerification({ verificationCode: emailCode })
@@ -63,10 +64,12 @@ export default function Login() {
         case LoginState.SUCCESS:
           setMessage("Successful! You are being redirected.")
           
-          const tokens = await wixClient.auth.getMemberTokensForDirectLogin(response.data.sessionToken)
+          const tokens = await wixClient.auth.getMemberTokensForDirectLogin(response?.data?.sessionToken)
+          Cookies.set("refreshToken", JSON.stringify(tokens?.refreshToken))
           wixClient.auth.setTokens(tokens)
-          Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken))
+          router.push("/")
           break;
+
         case LoginState.FAILURE:
           setMessage(response?.errorCode?.split(/(?=[A-Z])/).join(" ") || "Somthing went wrong")
 
@@ -86,8 +89,15 @@ export default function Login() {
   
   const inputStyle ="rounded-md px-3 py-2 outline-none placeholder:text-zinc-500 text-zinc-900"
 
+  
+  useEffect(() => {
+    if (wixClient?.auth?.loggedIn()) router.push("/")
+  }, [isLoggedIn])
+
+
   return (
     <section className='relative w-[100vhw] min-h-[80vh]'>
+      {isLoading && <div className="absolute bg-black/30 top-0 bottom-0 left-0 right-0 z-50"><span className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent absolute top-1/2 left-1/2 rounded-full"></span></div>}
       <form onSubmit={(e) => handleSubmit(e)} className='flex flex-col gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <h1 className="font-semibold text-2xl md:text-3xl lg:text-4xl my-4 text-center capitalize">{mode.replaceAll("_", " ").toLowerCase()}</h1>
         {mode !== MODE.EMAIL_VERFICATION ? 
