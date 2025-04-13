@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { IoBasketOutline, IoNotificationsOutline, IoPerson } from 'react-icons/io5'
 import Link from 'next/link'
 import CartModal from './CartModal'
@@ -12,8 +12,6 @@ export default function NavIcons() {
     const wixClient = useWixClient();
     const router = useRouter()
     const isLoggedIn = wixClient.auth.loggedIn()
-    
-    if (isLoggedIn) router.push("/")
 
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [isCartOpen, setIsCartOpen] = useState(false)
@@ -22,7 +20,7 @@ export default function NavIcons() {
     
     const handleProfile = ()=> {
         if(isCartOpen) setIsCartOpen(false)
-            setIsProfileOpen(prev => !prev) 
+        setIsProfileOpen(prev => !prev) 
     }
     
     const handleCart = ()=> {
@@ -35,17 +33,10 @@ export default function NavIcons() {
         Cookies.remove("refreshToken")
         setIsProfileOpen(false)
         router.push(logoutUrl)
-        console.log(logoutUrl)
         
     }
     
     const btnStyle = 'relative cursor-pointer p-2 rounded-full transition-colors duration-200 hover:text-primary'
-    useEffect(() => {
-    if (wixClient?.auth?.loggedIn()) {
-        router.push("/")
-    }
-    }, [wixClient])
-
 
     return (
         <div className='hidden sm:flex gap-4 relative'>
@@ -53,22 +44,17 @@ export default function NavIcons() {
                 <IoNotificationsOutline size={25} />
             </button>
 
-            {!isLoggedIn ? (
-                <Link href='/login' className={btnStyle}>
-                    <IoPerson size={25} />
-                </Link>
-            ) : (
-                <button onClick={handleProfile} className={btnStyle}>
-                    <IoPerson size={25} />
-                </button>
-            )}
+            <button onClick={handleProfile} className={btnStyle}>
+                <IoPerson size={25} />
+            </button>
+            
 
            {isProfileOpen && 
-                <div className='absolute top-12 flex flex-col gap-4 bg-zinc-800 rounded-xl p-4 shadow-xl z-20 min:w-30 [&>*]:text-start'>
+                <div className='absolute top-12 -left-8 flex flex-col gap-4 bg-zinc-800 rounded-xl p-4 shadow-xl z-20 min:w-30 [&>*]:text-start'>
                     <span className='absolute border-[14px] border-b-zinc-800 border-x-transparent border-t-transparent -top-[26px] right-2'></span>
                     <p><span className='text-primary font-medium text-[18px]'>Hello!</span> {isLoggedIn ? "Friend" : "Guest"}</p> 
                     {isLoggedIn && <button onClick={handleLogout}>Logout</button>}
-                    {!isLoggedIn && <Link href="/login">Login</Link>}
+                    {!isLoggedIn && <Link href="/login" onClick={handleProfile}>Login</Link>}
                 </div>
            }
 

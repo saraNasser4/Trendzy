@@ -16,22 +16,27 @@ export default async function Product({ categoryId, limit, searchParams, paginat
                                 .gt("priceData.price", Number(resolvedSearchParams?.min) || 0)
                                 .lt("priceData.price", Number(resolvedSearchParams?.max) || 100000)
                                 .limit(limit || PRODUCT_PER_PAGE)
-                                .skip(resolvedSearchParams?.page ? parseInt(searchParams.page) * (limit || PRODUCT_PER_PAGE) : 0)
+                                .skip(resolvedSearchParams?.page ? parseInt(resolvedSearchParams?.page) * (limit || PRODUCT_PER_PAGE) : 0)
                                 
     let response;
 
-    if(resolvedSearchParams?.sort) {
-        const [sortType, sortBy] = resolvedSearchParams?.sort?.split(" ") ?? []
+    try {
+        if(resolvedSearchParams?.sort) {
+            const [sortType, sortBy] = resolvedSearchParams?.sort?.split(" ") ?? []
+            
+            if(sortType === "asc" && sortBy) response = await productQuery.ascending(sortBy).find();
+            if(sortType === "desc" && sortBy) response = await productQuery.descending(sortBy).find();
+            if(sortType === "sort" && sortBy) response = await productQuery.find();
         
-        if(sortType === "asc" && sortBy) response = await productQuery.ascending(sortBy).find();
-        if(sortType === "desc" && sortBy) response = await productQuery.descending(sortBy).find();
-        if(sortType === "sort" && sortBy) response = await productQuery.find();
-    
-    } else{
-        response =  await productQuery.find()
+        } else{
+            response =  await productQuery?.find()
+        }
+    } catch (err) {
+        console.error(err)
+        response = { items: [] }
     }
     
-    const itemsList = response?.items
+    const itemsList = response?.items || []
     
     return (
         <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap mt-10">

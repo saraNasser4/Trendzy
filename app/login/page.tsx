@@ -59,15 +59,35 @@ export default function Login() {
           break;
       }
       console.log(response)
-
+      
       switch(response?.loginState) {
         case LoginState.SUCCESS:
           setMessage("Successful! You are being redirected.")
           
-          const tokens = await wixClient.auth.getMemberTokensForDirectLogin(response?.data?.sessionToken)
-          Cookies.set("refreshToken", JSON.stringify(tokens?.refreshToken))
-          wixClient.auth.setTokens(tokens)
-          router.push("/")
+          const sessionToken = response?.data?.sessionToken
+          if (sessionToken) {
+            console.log("tokens")
+            try {
+              const tokens = await wixClient.auth.getMemberTokensForDirectLogin(sessionToken)
+              console.log("tokens")
+
+              if(tokens) {
+                Cookies.set("refreshToken", JSON.stringify(tokens?.refreshToken))
+                Cookies.set("accessToken", JSON.stringify(tokens?.accessToken))
+                wixClient.auth.setTokens(tokens)
+                router.push("/")
+              } else {
+                setError("Failed to retrieve tokens.")
+              }
+
+            } catch (err) {
+              console.error(err)
+              setError("Error retrieving tokens.")
+            }
+          } else {
+            setError("Session token is invalid or missing.");
+          }   
+          
           break;
 
         case LoginState.FAILURE:
@@ -120,6 +140,7 @@ export default function Login() {
         
         <button onClick={()=> setMode(prev => prev === MODE.SIGN_IN ? MODE.LOGIN : MODE.SIGN_IN)} className="text-sm text-start underline hover:text-primary">{mode === "SIGN_IN" ? 'Have an Account Already' : `Don't Have an Account Yet`}</button>
         <span className="text-sm md:text-[16px] text-green-400 capitalize">{message}</span>
+        <span className="text-sm md:text-[16px] text-red-400 capitalize">{error}</span>
       </form>
     </section>
   )
