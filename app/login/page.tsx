@@ -10,7 +10,6 @@ enum MODE {
   LOGIN = "LOGIN",
   SIGN_IN = "SIGN_IN",
   RESET_PASSWORD = "RESET_PASSWORD",
-  EMAIL_VERFICATION = "EMAIL_VERFICATION",
 }
 
 export default function Login() {
@@ -19,14 +18,11 @@ export default function Login() {
   const router = useRouter()
   const isLoggedIn = wixClient.auth.loggedIn()
 
-  console.log(isLoggedIn)
-
   const [mode, setMode] = useState(MODE.LOGIN)
   
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [emailCode, setEmailCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
@@ -52,13 +48,9 @@ export default function Login() {
           response = await wixClient.auth.sendPasswordResetEmail(email, pathName)
           setMessage("Password reset email sent. Please check your email")
           break;
-        case MODE.EMAIL_VERFICATION:
-          response = await wixClient.auth.processVerification({ verificationCode: emailCode })
-          break;
         default:
           break;
       }
-      console.log(response)
       
       switch(response?.loginState) {
         case LoginState.SUCCESS:
@@ -66,10 +58,8 @@ export default function Login() {
           
           const sessionToken = response?.data?.sessionToken
           if (sessionToken) {
-            console.log("tokens")
             try {
               const tokens = await wixClient.auth.getMemberTokensForDirectLogin(sessionToken)
-              console.log("tokens")
 
               if(tokens) {
                 Cookies.set("refreshToken", JSON.stringify(tokens?.refreshToken))
@@ -120,25 +110,16 @@ export default function Login() {
       {isLoading && <div className="absolute bg-black/30 top-0 bottom-0 left-0 right-0 z-50"><span className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent absolute top-1/2 left-1/2 rounded-full"></span></div>}
       <form onSubmit={(e) => handleSubmit(e)} className='flex flex-col gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <h1 className="font-semibold text-2xl md:text-3xl lg:text-4xl my-4 text-center capitalize">{mode.replaceAll("_", " ").toLowerCase()}</h1>
-        {mode !== MODE.EMAIL_VERFICATION ? 
-            <>
-              {mode === MODE.SIGN_IN && <input onChange={(e)=> setUsername(e.target.value)} className={inputStyle} placeholder='Username' name="username" type="text" required />}
-              <input onChange={(e)=> setEmail(e.target.value)} className={inputStyle} placeholder='Email' name="email" type="email" required />
-              {(mode === MODE.SIGN_IN || mode === MODE.LOGIN) && <input onChange={(e)=> setPassword(e.target.value)} className={inputStyle} placeholder='Password' name="password" type="password" required min="8" title="Password should be more than 8 characters"/>}
-              {mode === MODE.LOGIN && <button onClick={()=> setMode(MODE.RESET_PASSWORD)} className="text-sm text-start underline -mt-1 hover:text-primary">Forget Password</button>}
-            </>
-          : 
-            <>
-              <input onChange={(e)=> setEmailCode(e.target.value)} className={inputStyle} placeholder='Verfication Code' name="verfication code" type="text" required />
-              <input className={inputStyle} placeholder='New Password' name="new password" type="password" required />
-              <input className={inputStyle} placeholder='New Password' name="new password" type="password" required />
-            </>
-        }
+        <>
+          {mode === MODE.SIGN_IN && <input onChange={(e)=> setUsername(e.target.value)} className={inputStyle} placeholder='Username' name="username" type="text" required />}
+          <input onChange={(e)=> setEmail(e.target.value)} className={inputStyle} placeholder='Email' name="email" type="email" required />
+          {(mode === MODE.SIGN_IN || mode === MODE.LOGIN) && <input onChange={(e)=> setPassword(e.target.value)} className={inputStyle} placeholder='Password' name="password" type="password" required min="8" title="Password should be more than 8 characters"/>}
+          {mode === MODE.LOGIN && <button onClick={()=> setMode(MODE.RESET_PASSWORD)} className="text-sm text-start underline -mt-1 hover:text-primary">Forget Password</button>}
+        </>   
         
+        <button className="text-md font-medium bg-primary py-2 px-3 my-2 rounded-md hover:bg-white hover:text-primary capitalize">{mode === MODE.RESET_PASSWORD ? "Reset" : mode.replaceAll("_", " ").toLowerCase()}</button>
         
-        <button className="text-md font-medium bg-primary py-2 px-3 my-2 rounded-md hover:bg-white hover:text-primary capitalize">{mode === MODE.EMAIL_VERFICATION ? "Verify" : mode === MODE.RESET_PASSWORD ? "Reset" : mode.replaceAll("_", " ").toLowerCase()}</button>
-        
-        <button onClick={()=> setMode(prev => prev === MODE.SIGN_IN ? MODE.LOGIN : MODE.SIGN_IN)} className="text-sm text-start underline hover:text-primary">{mode === "SIGN_IN" ? 'Have an Account Already' : `Don't Have an Account Yet`}</button>
+        <button onClick={()=> setMode(prev => prev === MODE.SIGN_IN || prev === MODE.RESET_PASSWORD ? MODE.LOGIN : MODE.SIGN_IN)} className="text-sm text-start underline hover:text-primary">{mode === "RESET_PASSWORD" ? "Go Back to Sign in Page" : mode === "SIGN_IN" ? 'Have an Account Already' : `Don't Have an Account Yet`}</button>
         <span className="text-sm md:text-[16px] text-green-400 capitalize">{message}</span>
         <span className="text-sm md:text-[16px] text-red-400 capitalize">{error}</span>
       </form>
