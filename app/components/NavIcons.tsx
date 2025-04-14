@@ -32,6 +32,7 @@ export default function NavIcons() {
     const handleLogout = async ()=> {
         const { logoutUrl} = await wixClient.auth.logout(window.location.href)
         Cookies.remove("refreshToken")
+        Cookies.remove("accessToken")
         setIsProfileOpen(false)
         router.push(logoutUrl)
         

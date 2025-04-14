@@ -1,15 +1,14 @@
 'use client'
 import { createClient, OAuthStrategy } from "@wix/sdk";
-import { products } from "@wix/stores";
-import { collections } from "@wix/stores";
+import { products, collections } from "@wix/stores";
+import { currentCart } from "@wix/ecom";
 import { useEffect, createContext, ReactNode } from "react";
 import Cookies from "js-cookie";
-
 
 const clientId = process.env.NEXT_PUBLIC_WIX_CLIENT_ID || ""
 
 const myWixClient = createClient({
-  modules: { products, collections },
+  modules: { products, collections, currentCart },
   auth: OAuthStrategy({
     clientId: clientId,
     tokens: JSON.parse(
