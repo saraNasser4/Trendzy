@@ -9,13 +9,12 @@ import { useRouter } from "next/navigation";
 
 export default function Menu() {
   const wixClient = useWixClient()
-  const isLoggedIn = wixClient.auth.loggedIn()
-  console.log(isLoggedIn)
+  const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
   
   const listStyle ="hover:text-primary text-[18px]"
 
   const listItems = ['homePage', 'shop', 'deals', 'about', 'contact']
-  const listMap = listItems.map((item, index)=> <Link onClick={()=> setOpen(false)} key={index} href={`/${index < 1 ? '' : item}`} className={listStyle}>{item}</Link>)
+  const listMap = listItems.map((item, index)=> <Link onClick={()=> setIsOpen(false)} key={index} href={`/${index < 1 ? '' : item}`} className={listStyle}>{item}</Link>)
   const [isOpen, setIsOpen] = useState(false)
   
   const router = useRouter()

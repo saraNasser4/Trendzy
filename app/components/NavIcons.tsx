@@ -11,21 +11,22 @@ import Cookies from 'js-cookie'
 export default function NavIcons() {
     const wixClient = useWixClient();
     const router = useRouter()
-    const isLoggedIn = wixClient.auth.loggedIn()
+    const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
 
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [isCartOpen, setIsCartOpen] = useState(false)
     
-
     
     const handleProfile = ()=> {
         if(isCartOpen) setIsCartOpen(false)
         setIsProfileOpen(prev => !prev) 
     }
+
+    console.log(isLoggedIn)
     
     const handleCart = ()=> {
         if(isProfileOpen) setIsProfileOpen(false)
-            setIsCartOpen(prev => !prev) 
+        setIsCartOpen(prev => !prev) 
     }
     
     const handleLogout = async ()=> {
