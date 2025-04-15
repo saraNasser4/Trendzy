@@ -1,7 +1,21 @@
+"use client"
+
+import { useEffect } from 'react'
+import useWixClient from '../hooks/useWixClient'
 import Items from './Items'
 
 export default function CartModal() {
   const cartItem = true
+
+  const wixClient = useWixClient()
+
+  useEffect(()=> {
+    const getCart = async ()=> {
+      const response = await wixClient.currentCart.getCurrentCart()
+      console.log(response)
+    }
+    getCart()
+  }, [wixClient])
 
   return (
     <div className='min-w-[250px] absolute top-12 right-0 flex flex-col gap-3 bg-zinc-800 rounded-xl p-4 shadow-xl z-20'>

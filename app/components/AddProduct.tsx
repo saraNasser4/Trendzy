@@ -1,14 +1,32 @@
 "use client"
 import { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
+import useWixClient from '../hooks/useWixClient'
 
-export default function AddProduct({ productQuantity }: { productQuantity : number }) {
+export default function AddProduct({ productId, productQuantity, variantId }: { productId: string, productQuantity: number, variantId?: string }) {
   const [quantity, setQuantity] = useState(1)
   const total = productQuantity || 0;
 
-  
+  const wixClient = useWixClient()
+
+  const addItem = async () => {
+    const response = await wixClient.currentCart.addToCurrentCart({
+      lineItems:[
+        {
+          catalogReference: { 
+            appId: process.env.NEXT_PUBLIC_WIX_APP_ID,
+            catalogItemId: productId,
+            ...[variantId && { option: { variantId }}],
+          },
+          quantity: productQuantity,
+        }
+      ]
+    })
+  }
   useEffect(()=> {
-    if(total < 1) setQuantity(0)
+    if(total < 1) {
+      setQuantity(0)
+    } else setQuantity(total)
   }, [total])
 
   return (
@@ -22,11 +40,11 @@ export default function AddProduct({ productQuantity }: { productQuantity : numb
             <button onClick={()=> setQuantity(prev=> prev < total ? prev + 1 : total)}><FaPlus /></button>
           </div>
           { total < 1 ? 
-            <p>All wen for legends</p> :
+            <p>All went for legends</p> :
             <p>Only <span className='text-primary'>{total} {total > 1 ? 'items' : 'item'}</span> left!<br /> Don&apos;t miss it</p>
           }
         </div>
-        <button className='text-sm rounded-xl px-4 py-2 ring-1 ring-primary text-primary transition-all duration-200 hover:text-white hover:bg-primary disabled:cursor-not-allowed disabled:text-white disabled:bg-light-blue'>Add to Cart</button>
+        <button onClick={()=> addItem()} className='text-sm rounded-xl px-4 py-2 ring-1 ring-primary text-primary transition-all duration-200 hover:text-white hover:bg-primary disabled:cursor-not-allowed disabled:text-white disabled:bg-light-blue'>Add to Cart</button>
       </div>
     </section>
   )
