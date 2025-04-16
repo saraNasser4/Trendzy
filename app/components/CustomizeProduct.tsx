@@ -36,7 +36,7 @@ export default function CustomizeProduct({ productOptions }: CustomizeProductPro
         return (
           <div key={options.name.toLowerCase()}>
             <h4 className="font-medium text-[18px] md:text-xl mb-2">Choose a {options.name}</h4>
-            <ul className="flex items-center gap-4 my-4">
+            <ul className="flex flex-wrap items-center gap-4 my-4">
               {options?.choices.map((choice, i)=> {          
                 return(
                   <div key={choice.description}>

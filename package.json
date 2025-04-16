@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
     "@wix/ecom": "^1.0.1058",
     "@wix/members": "^1.0.192",
     "@wix/sdk": "^1.15.10",
