@@ -42,10 +42,10 @@ export default async function Product({ categoryId, limit, searchParams, paginat
     
     
     return (
-        <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap flex-col mt-10">
+        <div className='mt-10'>
 
             {itemsList.length > 0 ?
-                <>
+                <div className="flex gap-x-8 gap-y-16 flex-wrap ">
                     {itemsList?.map(item => {
                         const productId = item?.inventoryItemId
                         return(
@@ -80,10 +80,11 @@ export default async function Product({ categoryId, limit, searchParams, paginat
                          
                     })}
                     
-                    {paginationAppear && <Pagination currentPage={response?.currentPage || 0} hasPrev={response?.hasPrev()} hasNext={response?.hasNext()} />}
-                </>
+                </div>
+            
             : <p>There aren&apos;t any Products</p>
-            }
+        }
+            {paginationAppear && <Pagination currentPage={response?.currentPage || 0} hasPrev={response?.hasPrev()} hasNext={response?.hasNext()} />}
         </div>
     )
 }
