@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import { WixContextProvider } from "./contexts/WixContext";
+import ClientProvider from "./components/ClientProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,11 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased w-full`}>
-        <WixContextProvider>
-          <NavBar />
-          {children}
-          <Footer />
-        </WixContextProvider>
+        <ClientProvider>
+          <WixContextProvider>
+            <NavBar />
+            {children}
+            <Footer />
+          </WixContextProvider>
+        </ClientProvider>
       </body>
     </html>
   );
