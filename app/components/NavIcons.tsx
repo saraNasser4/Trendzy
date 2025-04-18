@@ -8,6 +8,8 @@ import useWixClient from '../hooks/useWixClient'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
+import { useAppSelector } from '../store/hookType'
+
 export default function NavIcons() {
     const wixClient = useWixClient();
     const router = useRouter()
@@ -37,7 +39,10 @@ export default function NavIcons() {
         router.push(logoutUrl)
         
     }
+
     
+    const count = useAppSelector(state => state.value)
+    console.log(count)
     const btnStyle = 'relative cursor-pointer p-2 rounded-full transition-colors duration-200 hover:text-primary'
 
     return (
@@ -61,7 +66,7 @@ export default function NavIcons() {
            }
 
             <button className={btnStyle} onClick={handleCart}>
-                <span className='absolute -top-1 bg-red-600 !transition-none text-white px-1.5 rounded-full z-[-1]'>2</span>
+                {count > 0 && <span className='absolute -top-1 bg-red-600 !transition-none text-white px-1.5 rounded-full z-[-1]'>{count || 0}</span>}
                 <IoBasketOutline size={25} />
             </button>
 

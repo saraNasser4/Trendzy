@@ -3,11 +3,18 @@
 import { useEffect } from 'react'
 import useWixClient from '../hooks/useWixClient'
 import Items from './Items'
+import Link from 'next/link'
+import { useAppDispatch } from '../store/hookType'
+import { reset } from '../store/counterSlice'
+
+const cartItem = true
 
 export default function CartModal() {
-  const cartItem = true
-
   const wixClient = useWixClient()
+
+  const dispatch = useAppDispatch()
+
+  const btnStyle = 'px-3 py-2 rounded-lg transition-all duration-200'
 
   useEffect(()=> {
     const getCart = async ()=> {
@@ -28,7 +35,9 @@ export default function CartModal() {
         </div>
         <p className='text-zinc-500 text-[14px]'>Shippeing and taxes calcuart</p>
         <div className='flex justify-between'>
-          {['View Cart', 'Clear All'].map((btn, ind)=> <button key={ind} className={`${ind === 0 ? 'border border-zinc-500 hover:border-primary/70 hover:text-primary/70' : 'bg-primary text hover:bg-primary/70'} px-3 py-2 rounded-lg transition-all duration-200`}>{btn}</button>)}
+
+          <Link href={'/'} className={`${btnStyle} border border-zinc-500 hover:border-primary/70 hover:text-primary/70`}>View Cart</Link>
+          <button onClick={()=> dispatch(reset())} className={`${btnStyle} bg-primary text hover:bg-primary/70`}>Clear All</button>
         </div>
     </div>
   )
