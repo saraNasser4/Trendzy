@@ -17,7 +17,6 @@ export default function Items() {
                 </div>
             </div>  
         </div>
-        <span className='bg-zinc-500 h-[1px] rounded-md w-full'></span>
     </div>
   )
 }

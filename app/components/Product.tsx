@@ -42,7 +42,7 @@ export default async function Product({ categoryId, limit, searchParams, paginat
     
     
     return (
-        <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap mt-10">
+        <div className="flex gap-x-8 gap-y-16 justifybetween flex-wrap flex-col mt-10">
 
             {itemsList.length > 0 ?
                 <>

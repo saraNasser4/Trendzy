@@ -16,7 +16,7 @@ export default async function ListPage({ searchParams }: { searchParams: { cat: 
   const categoryId = collection?._id ||  "00000000-000000-000000-000000000001"
   
   return (
-    <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full '>
+    <section className='px-4 md:px-8 mx-auto max-w-[1550px] w-full '>
       <div className='relative mb-20'>
         <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
           <h2 className='font-semibold text-xl md:text-2xl lg:text-3xl 2xl:text-5xl sm:text-nowrap'>Grab up to 50% off on Selected Products</h2>
@@ -31,6 +31,6 @@ export default async function ListPage({ searchParams }: { searchParams: { cat: 
         <h3 className='font-semibold text-[18px] sm:text-xl lg:text-2xl 2xl:text-3xl'>All Products For You!</h3>
         <Product categoryId={categoryId} searchParams={searchParams} paginationAppear={true} />
       </div>
-    </main>
+    </section>
   )
 }

@@ -42,7 +42,7 @@ export default function NavIcons() {
 
     
     const count = useAppSelector(state => state.value)
-    console.log(count)
+    
     const btnStyle = 'relative cursor-pointer p-2 rounded-full transition-colors duration-200 hover:text-primary'
 
     return (
