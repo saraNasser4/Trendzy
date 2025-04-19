@@ -12,7 +12,7 @@ export default function AddProduct({ productId, productQuantity, variantId }: { 
   useEffect(()=> {
     if(total < 1) {
       setQuantity(0)
-    } else setQuantity(total)
+    } else setQuantity(1)
   }, [total])
 
   return (
@@ -30,7 +30,7 @@ export default function AddProduct({ productId, productQuantity, variantId }: { 
             <p>Only <span className='text-primary'>{total} {total > 1 ? 'items' : 'item'}</span> left!<br /> Don&apos;t miss it</p>
           }
         </div>
-        <AddBtn productId={productId} productQuantity={productQuantity} variantId={variantId} />
+        <AddBtn productId={productId} productQuantity={quantity} variantId={variantId} />
       </div>
     </section>
   )

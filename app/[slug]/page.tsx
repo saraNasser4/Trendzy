@@ -21,7 +21,7 @@ export default async function SinglePage({ params }: { params: { slug: string } 
 
 
   return (
-    <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
+    <main className='px-4 md:px-8 mx-auto max-w-[1550px] w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 relative'>
       
       <div>
         <ProductImages productMedia={product.media?.items} />
