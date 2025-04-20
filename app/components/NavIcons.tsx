@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { IoBasketOutline, IoNotificationsOutline, IoPerson } from 'react-icons/io5'
 import Link from 'next/link'
 import CartModal from './CartModal'
@@ -10,13 +10,12 @@ import Cookies from 'js-cookie'
 
 import { useAppSelector } from '../store/hookType'
 
-export default function NavIcons() {
+export default function NavIcons({ isCartOpen, setIsCartOpen }: { isCartOpen: boolean, setIsCartOpen: React.FC}) {
     const wixClient = useWixClient();
     const router = useRouter()
     const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
 
     const [isProfileOpen, setIsProfileOpen] = useState(false)
-    const [isCartOpen, setIsCartOpen] = useState(false)
     
     
     const handleProfile = ()=> {
@@ -70,7 +69,7 @@ export default function NavIcons() {
                 <IoBasketOutline size={25} />
             </button>
 
-            {isCartOpen && <CartModal />}
+            {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
         </div>
     )
 }

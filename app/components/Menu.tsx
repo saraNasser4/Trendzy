@@ -1,42 +1,59 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { IoIosClose, IoIosMenu } from "react-icons/io";
 import Link from 'next/link'
 import useWixClient from "../hooks/useWixClient";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import CartModal from "./CartModal";
 
-export default function Menu() {
+export default function Menu({ isCartOpen, setIsCartOpen }: { isCartOpen: boolean, setIsCartOpen: React.FC}) {
   const wixClient = useWixClient()
   const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
   
   const listStyle ="hover:text-primary text-[18px]"
 
-  const listItems = ['homePage', 'shop', 'deals', 'about', 'contact']
-  const listMap = listItems.map((item, index)=> <Link onClick={()=> setIsOpen(false)} key={index} href={`/${index < 1 ? '' : item}`} className={listStyle}>{item}</Link>)
-  const [isOpen, setIsOpen] = useState(false)
+  const listItems = [
+    { item: 'homePage', link: '/' },
+    { item: 'shop', link: '/list?cat=all-products' },
+    { item: 'deals', link: '/list?cat=all-products&type=New+Arrival' },
+    { item: 'about', link: '/' },
+    { item: 'contact', link: '/' },
+  ]
+  const listMap = listItems.map((itemObj, index)=> <Link onClick={()=> setIsMenueOpen(false)} key={index} href={itemObj.link} className={listStyle}>{itemObj.item}</Link>)
+  const [isMenuOpen, setIsMenueOpen] = useState(false)
+  
   
   const router = useRouter()
   const handleLogout = async ()=> {
     const { logoutUrl} = await wixClient.auth.logout(window.location.href)
     Cookies.remove("refreshToken")
-    setIsOpen(false)
+    setIsMenueOpen(false)
     router.push(logoutUrl)
     
-}
+  }
+
+  const handleViewCart = ()=> {
+    setIsMenueOpen(prev => !prev)
+    setIsCartOpen(prev => !prev)
+   }
+
   return (
     <>
-      <button onClick={()=> setIsOpen(prev => !prev)} className="sm:hidden">
-        {isOpen ? <IoIosClose size={35} /> : <IoIosMenu size={30} />}
+      <button onClick={()=> setIsMenueOpen(prev => !prev)} className="sm:hidden">
+        {isMenuOpen ? <IoIosClose size={35} /> : <IoIosMenu size={30} />}
       </button>
       
-      {isOpen && (
+      {isMenuOpen && (
         <div className='-z-[1] fixed bg-black/90 left-0 right-0 top-0 bottom-0 flex items-center justify-center flex-col sm:flex-row sm:top-1 sm:relative gap-4 capitalize'>
           {listMap}
-          {isLoggedIn ? <button className={listStyle} onClick={handleLogout}>Logout</button> : <Link href='/login' onClick={()=> setIsOpen(prev => !prev)} className={listStyle}>Login</Link>}
+          {isLoggedIn ? <button className={listStyle} onClick={handleLogout}>Logout</button> : <Link href='/login' onClick={()=> setIsMenueOpen(prev => !prev)} className={listStyle}>Login</Link>}
+          <button onClick={handleViewCart} className='my-2 rounded-xl px-6 py-2 ring-1 ring-primary bg-primary transition-all duration-200 hover:text-primary hover:bg-transparent'>View Cart</button>
         </div>
       )}
+
+      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
 
       <div className="hidden md:flex gap-3 items-center capitalize">
         {listMap}

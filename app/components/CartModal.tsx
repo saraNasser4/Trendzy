@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import useWixClient from '../hooks/useWixClient'
 import Items from './Items'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../store/hookType'
 import { reset } from '../store/counterSlice'
 
 
-export default function CartModal() {
+export default function CartModal(setIsCartOpen: React.FC) {
   const wixClient = useWixClient()
   
   const dispatch = useAppDispatch()
@@ -26,8 +26,11 @@ export default function CartModal() {
     getCart()
   }, [wixClient])
 
+  const smStyle = 'w-[90%] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mx-auto'
+  const lgStyle = 'sm:min-w-[250px] sm:absolute sm:top-12 sm:right-0 translate-x-0 translate-y-0 sm:flex flex-col gap-3 mx-0'
+
   return (
-    <div className='min-w-[250px] absolute top-12 right-0 flex flex-col gap-3 bg-zinc-800 rounded-xl p-4 shadow-xl z-20'>
+     <div className={`${smStyle} ${lgStyle} bg-zinc-800 rounded-xl p-4 shadow-xl z-20`}> 
       <span className='absolute border-[14px] border-b-zinc-800 border-x-transparent border-t-transparent -top-[26px] right-2'></span>
       <h3 className='text-2xl font-semibold'>Shipping Cart</h3>
       {cartItem ? 
@@ -45,7 +48,7 @@ export default function CartModal() {
       
       <span className='bg-zinc-500 h-[1px] rounded-md w-full'></span>
       <div className='flex justify-between'>
-        <Link href={'/'} className={`${btnStyle} border border-zinc-500 hover:border-primary/70 hover:text-primary/70`}>View Cart</Link>
+        <Link href={'/list?cat=all-products'} className={`${btnStyle} border border-zinc-500 hover:border-primary/70 hover:text-primary/70`}>Keep Looking</Link>
         <button onClick={()=> dispatch(reset())} className={`${btnStyle} bg-primary text hover:bg-primary/70`}>Clear All</button>
       </div>
     </div>
