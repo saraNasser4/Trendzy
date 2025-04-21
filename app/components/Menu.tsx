@@ -6,9 +6,8 @@ import Link from 'next/link'
 import useWixClient from "../hooks/useWixClient";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import CartModal from "./CartModal";
 
-export default function Menu({ isCartOpen, setIsCartOpen }: { isCartOpen: boolean, setIsCartOpen: React.FC}) {
+export default function Menu({ setIsCartOpen }: { setIsCartOpen: React.FC}) {
   const wixClient = useWixClient()
   const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
   
@@ -46,14 +45,14 @@ export default function Menu({ isCartOpen, setIsCartOpen }: { isCartOpen: boolea
       </button>
       
       {isMenuOpen && (
-        <div className='-z-[1] fixed bg-black/90 left-0 right-0 top-0 bottom-0 flex items-center justify-center flex-col sm:flex-row sm:top-1 sm:relative gap-4 capitalize'>
+        <div className='-z-[1] fixed bg-black/90 left-0 right-0 top-0 bottom-0 flex items-center justify-center flex-col sm:flex-row sm:top-1 sm:relative gap-4 capitalize md:hidden'>
           {listMap}
           {isLoggedIn ? <button className={listStyle} onClick={handleLogout}>Logout</button> : <Link href='/login' onClick={()=> setIsMenueOpen(prev => !prev)} className={listStyle}>Login</Link>}
           <button onClick={handleViewCart} className='my-2 rounded-xl px-6 py-2 ring-1 ring-primary bg-primary transition-all duration-200 hover:text-primary hover:bg-transparent'>View Cart</button>
         </div>
       )}
 
-      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
+      
 
       <div className="hidden md:flex gap-3 items-center capitalize">
         {listMap}

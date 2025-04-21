@@ -69,7 +69,6 @@ export default function NavIcons({ isCartOpen, setIsCartOpen }: { isCartOpen: bo
                 <IoBasketOutline size={25} />
             </button>
 
-            {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
         </div>
     )
 }

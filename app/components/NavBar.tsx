@@ -5,6 +5,7 @@ import Menu from './Menu'
 import SearchForm from './SearchForm'
 import NavIcons from './NavIcons'
 import { useState } from 'react'
+import CartModal from './CartModal'
 
 export default function NavBar() {
   const [isCartOpen, setIsCartOpen] = useState(false)
@@ -15,9 +16,10 @@ export default function NavBar() {
       <Link href='/'>
         <Image src='/logo.png' width={160} height={18} alt='logo' priority={true} />
       </Link>
-      <Menu isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />  
+      <Menu setIsCartOpen={setIsCartOpen} />  
       <SearchForm />
-      <NavIcons isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+      <NavIcons setIsCartOpen={setIsCartOpen} />
+      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
     </nav>
   )
 }
