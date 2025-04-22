@@ -3,14 +3,13 @@
 import React, { useState } from 'react'
 import { IoBasketOutline, IoNotificationsOutline, IoPerson } from 'react-icons/io5'
 import Link from 'next/link'
-import CartModal from './CartModal'
 import useWixClient from '../hooks/useWixClient'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
 import { useAppSelector } from '../store/hookType'
 
-export default function NavIcons({ isCartOpen, setIsCartOpen }: { isCartOpen: boolean, setIsCartOpen: React.FC}) {
+export default function NavIcons({ isCartOpen, setIsCartOpen }: { isCartOpen: boolean, setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
     const wixClient = useWixClient();
     const router = useRouter()
     const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
