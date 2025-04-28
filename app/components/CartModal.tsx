@@ -26,9 +26,7 @@ export default function CartModal({ setIsCartOpen }: { setIsCartOpen: React.Disp
   
 
   useEffect(()=> {
-    const getCart = async ()=> {
-      const cart = await wixClient.currentCart.getCurrentCart()
-    }
+    const getCart = async ()=> await wixClient.currentCart.getCurrentCart()
     getCart()
   }, [wixClient])
 

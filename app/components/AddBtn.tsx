@@ -16,7 +16,7 @@ export default function AddBtn({ productId, productQuantity, variantId }: { prod
     const addItem = async () => {
       setIsLoading(true)
       try {
-        const response = await wixClient.currentCart.addToCurrentCart({
+        await wixClient.currentCart.addToCurrentCart({
           lineItems:[
             {
               catalogReference: { 

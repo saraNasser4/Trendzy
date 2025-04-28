@@ -102,7 +102,7 @@ export default function Login() {
   
   useEffect(() => {
     if (wixClient?.auth?.loggedIn()) router.push("/")
-  }, [isLoggedIn])
+  }, [router, wixClient, isLoggedIn])
 
 
   return (
