@@ -23,11 +23,7 @@ export default function CartModal({ setIsCartOpen }: { setIsCartOpen: React.Disp
     dispatch(reset())
 
   }
-  const render = ()=> {
-    let items: Array = []
-    for(let i =0; i<= count; i++) items.push(<Items />)
-    return items
-  }
+  
 
   useEffect(()=> {
     const getCart = async ()=> {
@@ -47,8 +43,7 @@ export default function CartModal({ setIsCartOpen }: { setIsCartOpen: React.Disp
       {cartItem ? 
       <>
         <div className={`max-h-[330px] flex flex-col gap-6 overflow-y-scroll scroll`}>
-          
-          {render()}
+          {[...Array(count)].map((_, ind)=> <Items key={ind} /> )}
         </div>
         <div className='flex justify-between items-center font-medium text-xl'>
             <span>Subtotal</span>

@@ -36,7 +36,7 @@ export default function Slider() {
             setCurrent(prev => prev === slides.length - 1 ? 0 : prev + 1)
         }, 10000)
         return ()=> clearInterval(interval)
-    }, [])
+    }, [slides.length])
 
     return (
         <section className="h-[calc(100vh-80px)] overflow-hidden">

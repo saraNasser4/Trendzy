@@ -5,7 +5,9 @@ import useWixClient from "../hooks/useWixClient"
 import { useAppDispatch } from "../store/hookType"
 import { incrementByAmount } from "../store/counterSlice"
 
-export default function AddBtn({ productId, productQuantity, variantId }: { productObj: any, productId: string, productQuantity: number, variantId?: string }) {
+
+
+export default function AddBtn({ productId, productQuantity, variantId }: { productId: string, productQuantity: number, variantId?: string }) {
     const [inStock, setInStock] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const wixClient = useWixClient()

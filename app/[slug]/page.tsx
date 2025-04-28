@@ -34,7 +34,7 @@ export default async function SinglePage({ params }: { params: { slug: string } 
           <p className="text-primary">{product.price?.currency} {product.ribbon === "Sale" ? product.price?.discountedPrice : product.price?.price}</p>
         </div>
         <CustomizeProduct productOptions={product?.productOptions || {}}/>
-        <AddProduct productObj={product} productId={productId} productQuantity={productQuantity || 0}  />
+        <AddProduct productId={productId} productQuantity={productQuantity || 0}  />
         {product?.additionalInfoSections?.map((detail, index)=> {
           return(
             <div key={index} className="my-5">
