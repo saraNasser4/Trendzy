@@ -22,7 +22,6 @@ export default function NavIcons({ isCartOpen, setIsCartOpen }: { isCartOpen: bo
         setIsProfileOpen(prev => !prev) 
     }
 
-    console.log(isLoggedIn)
     
     const handleCart = ()=> {
         if(isProfileOpen) setIsProfileOpen(false)

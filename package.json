@@ -12,7 +12,7 @@
     "@reduxjs/toolkit": "^2.7.0",
     "@wix/ecom": "^1.0.1058",
     "@wix/members": "^1.0.192",
-    "@wix/sdk": "^1.15.10",
+    "@wix/sdk": "^1.15.17",
     "@wix/stores": "^1.0.354",
     "js-cookie": "^3.0.5",
     "next": "15.1.4",

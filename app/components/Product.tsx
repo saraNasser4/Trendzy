@@ -38,8 +38,6 @@ export default async function Product({ categoryId, limit, searchParams, paginat
     }
     
     const itemsList = response?.items || []
-    console.log(itemsList[0])
-    
     
     return (
         <div className='mt-10'>
@@ -50,7 +48,7 @@ export default async function Product({ categoryId, limit, searchParams, paginat
                         const productId = item?.inventoryItemId
                         return(
 
-                            <div key={item.name} className="w-full sm:w-[46%] lg:w-[22%] [&>:last-child]:my-5">
+                            <div key={item.name} className="w-full sm:w-[46%] lg:w-[31%] [&>:last-child]:my-5">
                                 <Link href={`/${item.slug}`} className="flex flex-col gap-4">
                                     <div className="relative w-full h-80">
                                         <Image 
@@ -74,7 +72,7 @@ export default async function Product({ categoryId, limit, searchParams, paginat
                                     <p className="line-clamp-1 text-[15px] text-gray-400">{item.description}</p>
                                 </Link>
                                 
-                                <AddBtn productId={productId} productQuantity={item?.productOptions?.[0]?.choices?.[0]?.inStock ? 1 : 0} variantId={"variantId"} />
+                                <AddBtn productObj={item} productId={productId} productQuantity={item?.productOptions?.[0]?.choices?.[0]?.inStock ? 1 : 0} variantId={"variantId"} />
                             </div>
                         )
                          

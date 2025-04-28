@@ -6,26 +6,32 @@ import Items from './Items'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '../store/hookType'
 import { reset } from '../store/counterSlice'
-import { cart } from '@wix/ecom'
 import { IoIosClose } from 'react-icons/io'
 
 
 export default function CartModal({ setIsCartOpen }: { setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
   const wixClient = useWixClient()
-  
   const dispatch = useAppDispatch()
   const count = useAppSelector(state => state.value)
   
   const cartItem = count > 0
+  
 
   const btnStyle = 'px-3 py-2 rounded-lg transition-all duration-200'
 
+  const handleClearAll = async ()=> {
+    dispatch(reset())
+
+  }
+  const render = ()=> {
+    let items: Array = []
+    for(let i =0; i<= count; i++) items.push(<Items />)
+    return items
+  }
+
   useEffect(()=> {
     const getCart = async ()=> {
-      const response = await wixClient.currentCart.getCurrentCart()
-      // const updatedCart = await cart.addToCart(response._id);
-      // console.log("Success! Updated cart:", updatedCart);
-      console.log(response);
+      const cart = await wixClient.currentCart.getCurrentCart()
     }
     getCart()
   }, [wixClient])
@@ -39,14 +45,17 @@ export default function CartModal({ setIsCartOpen }: { setIsCartOpen: React.Disp
       </button>
       <h3 className='text-2xl font-semibold pb-6'>Shipping Cart</h3>
       {cartItem ? 
-        <>
-          <Items /> 
-          <div className='flex justify-between items-center font-medium text-xl'>
+      <>
+        <div className={`max-h-[330px] flex flex-col gap-6 overflow-y-scroll scroll`}>
+          
+          {render()}
+        </div>
+        <div className='flex justify-between items-center font-medium text-xl'>
             <span>Subtotal</span>
             <span>$ 30</span>
           </div>
           <p className='text-zinc-500 text-[14px]'>Shippeing and taxes calcuart</p>
-        </>
+      </>
       : 
         <div className='my-4 text-zinc-500 text-center text-xl'>Cart is Empty</div>
       }
@@ -54,7 +63,7 @@ export default function CartModal({ setIsCartOpen }: { setIsCartOpen: React.Disp
       <div className='bg-zinc-500 h-[1px] rounded-md w-full' />
       <div className='flex justify-between'>
         <Link href={'/list?cat=all-products'} className={`${btnStyle} border border-zinc-500 hover:border-primary/70 hover:text-primary/70`}>Keep Looking</Link>
-        <button onClick={()=> dispatch(reset())} className={`${btnStyle} bg-primary text hover:bg-primary/70`}>Clear All</button>
+        <button onClick={handleClearAll} className={`${btnStyle} bg-primary text hover:bg-primary/70`}>Clear All</button>
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import { FaMinus, FaPlus } from 'react-icons/fa6'
 
 import AddBtn from './AddBtn'
 
-export default function AddProduct({ productId, productQuantity, variantId }: { productId: string, productQuantity: number, variantId?: string }) {
+export default function AddProduct({ productObj, productId, productQuantity, variantId }: { productObj: any, productId: string, productQuantity: number, variantId?: string }) {
   const [quantity, setQuantity] = useState(1)
   const total = productQuantity || 0;
 
@@ -30,7 +30,7 @@ export default function AddProduct({ productId, productQuantity, variantId }: { 
             <p>Only <span className='text-primary'>{total} {total > 1 ? 'items' : 'item'}</span> left!<br /> Don&apos;t miss it</p>
           }
         </div>
-        <AddBtn productId={productId} productQuantity={quantity} variantId={variantId} />
+        <AddBtn productObj={productObj} productId={productId} productQuantity={quantity} variantId={variantId} />
       </div>
     </section>
   )

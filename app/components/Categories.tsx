@@ -7,7 +7,6 @@ export default async function Categories() {
     const myWixServer = await wixServer()
     const res = await myWixServer.collections.queryCollections().find();
     const categoriesList = res.items;
-    // console.log(categoriesList)
     
     return (
         <div className="my-24 max-w-[1550px]">
