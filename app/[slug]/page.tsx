@@ -4,7 +4,13 @@ import AddProduct from "../components/AddProduct";
 import wixServer from "../lib/wixServer";
 import { notFound } from "next/navigation";
 
-export default async function SinglePage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function SinglePage({ params }: PageProps) {
   const myWixServer = await wixServer()
   
   const resolvedParams = params
