@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 export default async function SinglePage({ params }: { params: { slug: string } }) {
   const myWixServer = await wixServer()
   
-  const resolvedParams = await params
+  const resolvedParams = params
   const paramsSlug = resolvedParams.slug
 
   const products = await myWixServer.products.queryProducts().eq("slug", paramsSlug).find();

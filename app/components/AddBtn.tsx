@@ -51,7 +51,7 @@ export default function AddBtn({ productId, productQuantity, variantId }: { prod
 
     return (
       <>
-        <div className={`${isLoading ? 'flex' : 'hidden'} absolute top-0 right-0 left-0 bottom-0 bg-black/40 items-center justify-center`}>
+        <div className={`${isLoading ? 'flex' : 'hidden'} fixed top-0 right-0 left-0 bottom-0 bg-black/40 items-center justify-center z-50`}>
           <span className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
         
