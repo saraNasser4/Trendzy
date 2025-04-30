@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import useWixClient from "../hooks/useWixClient"
 import { LoginState } from "@wix/sdk"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
+import { wixClient } from "../lib/wixClient"
 
 enum MODE {
   LOGIN = "LOGIN",
@@ -12,20 +12,20 @@ enum MODE {
   RESET_PASSWORD = "RESET_PASSWORD",
 }
 
-export default function Login() {
-  const wixClient = useWixClient()
-  const pathName = window.location.href
-  const router = useRouter()
-  const isLoggedIn = wixClient.auth.loggedIn()
+const inputStyle ="rounded-md px-3 py-2 outline-none placeholder:text-zinc-500 text-zinc-900"
 
+export default function Login() {
+  const router = useRouter()
+  
   const [mode, setMode] = useState(MODE.LOGIN)
+  const [isLoading, setIsLoading] = useState(false)
   
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
+  const [pathName, setPathName] = useState("")  
 
   
   const handleSubmit = async (e: React.FormEvent)=> {
@@ -37,57 +37,42 @@ export default function Login() {
     try {
       let response;
 
-      switch(mode) {
-        case MODE.LOGIN:
-          response = await wixClient.auth.login({ email, password })
-          break;
-        case MODE.SIGN_IN:
-          response = await wixClient.auth.register({ email, password, profile: { nickname: username } })
-          break;
-        case MODE.RESET_PASSWORD:
-          response = await wixClient.auth.sendPasswordResetEmail(email, pathName)
-          setMessage("Password reset email sent. Please check your email")
-          break;
-        default:
-          break;
-      }
-      
-      switch(response?.loginState) {
-        case LoginState.SUCCESS:
-          setMessage("Successful! You are being redirected.")
-          
-          const sessionToken = response?.data?.sessionToken
-          if (sessionToken) {
-            try {
-              const tokens = await wixClient.auth.getMemberTokensForDirectLogin(sessionToken)
-
-              if(tokens) {
-                Cookies.set("refreshToken", JSON.stringify(tokens?.refreshToken))
-                Cookies.set("accessToken", JSON.stringify(tokens?.accessToken))
-                wixClient.auth.setTokens(tokens)
-                router.push("/")
-              } else {
-                setError("Failed to retrieve tokens.")
-              }
-
-            } catch (err) {
-              console.error(err)
-              setError("Error retrieving tokens.")
-            }
-          } else {
-            setError("Session token is invalid or missing.");
-          }   
-          
-          break;
-
-        case LoginState.FAILURE:
-          setMessage(response?.errorCode?.split(/(?=[A-Z])/).join(" ") || "Somthing went wrong")
-
-          break;
-        default:
-          break;
+      if (mode === MODE.RESET_PASSWORD) {
+        await wixClient.auth.sendPasswordResetEmail(email, pathName)
+        setMessage("Password reset email sent. Please check your email")
+        return
       }
 
+      if(mode === MODE.LOGIN) {
+        response = await wixClient.auth.login({ email, password })
+      } else if (mode === MODE.SIGN_IN) {
+        response = await wixClient.auth.register({ email, password, profile: { nickname: username } })
+      }
+  
+      if(response?.loginState === LoginState.SUCCESS) {
+        setMessage("Successful! You are being redirected.")
+        
+        const sessionToken = response?.data?.sessionToken
+        
+        if (!sessionToken) {
+          setError("Session token missing.")
+          return
+        }
+        
+        const tokens = await wixClient.auth.getMemberTokensForDirectLogin(sessionToken)
+
+        Cookies.set("refreshToken", JSON.stringify(tokens?.refreshToken))
+        Cookies.set("accessToken", JSON.stringify(tokens?.accessToken))
+        wixClient.auth.setTokens(tokens)
+        router.push("/")
+          
+
+        console.log(response)
+      } else {
+        console.log(response)
+        setError(response?.errorCode.split(/(?=[A-Z])/).join(" ") || "Somthing went wrong")
+
+      }
     }catch(err) {
       console.error(err)
       setError("Somthing went wrong!")
@@ -97,13 +82,18 @@ export default function Login() {
     }
   }
   
-  const inputStyle ="rounded-md px-3 py-2 outline-none placeholder:text-zinc-500 text-zinc-900"
-
-  
-  useEffect(() => {
-    if (wixClient?.auth?.loggedIn()) router.push("/")
-  }, [router, wixClient, isLoggedIn])
-
+  useEffect(()=> {
+    setPathName(window.location.href)
+    const checkLogin = async () => {
+      try {
+        const isLoggedIn = wixClient.auth.loggedIn()
+        if (isLoggedIn) router.push("/")
+      } catch (e) {
+        console.error("Login check failed", e)  
+      }
+    }
+    checkLogin()
+  }, [router])
 
   return (
     <section className='relative w-[100vhw] min-h-[80vh]'>
@@ -113,7 +103,7 @@ export default function Login() {
         <>
           {mode === MODE.SIGN_IN && <input onChange={(e)=> setUsername(e.target.value)} className={inputStyle} placeholder='Username' name="username" type="text" required />}
           <input onChange={(e)=> setEmail(e.target.value)} className={inputStyle} placeholder='Email' name="email" type="email" required />
-          {(mode === MODE.SIGN_IN || mode === MODE.LOGIN) && <input onChange={(e)=> setPassword(e.target.value)} className={inputStyle} placeholder='Password' name="password" type="password" required min="8" title="Password should be more than 8 characters"/>}
+          {(mode === MODE.SIGN_IN || mode === MODE.LOGIN) && <input onChange={(e)=> setPassword(e.target.value)} className={inputStyle} placeholder='Password' name="password" type="password" required minLength={8} title="Password should be more than 8 characters"/>}
           {mode === MODE.LOGIN && <button onClick={()=> setMode(MODE.RESET_PASSWORD)} className="text-sm text-start underline -mt-1 hover:text-primary">Forget Password</button>}
         </>   
         

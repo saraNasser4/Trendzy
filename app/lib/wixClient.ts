@@ -6,8 +6,8 @@ import { currentCart } from "@wix/ecom"
 import { members } from "@wix/members"
 import Cookies from "js-cookie"
 
-const refreshToken = JSON.parse(Cookies.get('refreshToken')!)
-const accessToken = JSON.parse(Cookies.get('accessToken')!)
+const refreshToken = JSON.parse(Cookies.get('refreshToken') || '{}')
+const accessToken = JSON.parse(Cookies.get('accessToken') || '{}')
 
 export const wixClient = createClient({
     modules: { products, collections, currentCart, members },
