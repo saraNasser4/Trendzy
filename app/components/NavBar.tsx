@@ -6,9 +6,19 @@ import SearchForm from './SearchForm'
 import NavIcons from './NavIcons'
 import { useState } from 'react'
 import CartModal from './CartModal'
+import { wixClient } from '../lib/wixClient'
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/navigation'
 
 export default function NavBar() {
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const router = useRouter()
+  const logout = async ()=> {
+          const { logoutUrl} = await wixClient.auth.logout(window.location.href)
+          Cookies.remove("refreshToken")
+          Cookies.remove("accessToken")
+          router.push(logoutUrl)
+  }
     
   
   return (
@@ -16,9 +26,9 @@ export default function NavBar() {
       <Link href='/'>
         <Image src='/logo.png' width={160} height={18} alt='logo' priority={true} />
       </Link>
-      <Menu setIsCartOpen={setIsCartOpen} />  
+      <Menu logoutFun={logout} setIsCartOpen={setIsCartOpen} />  
       <SearchForm />
-      <NavIcons setIsCartOpen={setIsCartOpen} />
+      <NavIcons logoutFun={logout} isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
       {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
     </nav>
   )

@@ -4,14 +4,13 @@ import React, { useState } from 'react'
 import { IoBasketOutline, IoNotificationsOutline, IoPerson } from 'react-icons/io5'
 import Link from 'next/link'
 import useWixClient from '../hooks/useWixClient'
-import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
 import { useAppSelector } from '../store/hookType'
 
-export default function NavIcons({ isCartOpen, setIsCartOpen }: { isCartOpen: boolean, setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function NavIcons({ logoutFun, isCartOpen, setIsCartOpen }: { logoutFun: ()=> void, isCartOpen: boolean, setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
     const wixClient = useWixClient();
-    const router = useRouter()
+
     const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
 
     const [isProfileOpen, setIsProfileOpen] = useState(false)
@@ -29,14 +28,9 @@ export default function NavIcons({ isCartOpen, setIsCartOpen }: { isCartOpen: bo
     }
     
     const handleLogout = async ()=> {
-        const { logoutUrl} = await wixClient.auth.logout(window.location.href)
-        Cookies.remove("refreshToken")
-        Cookies.remove("accessToken")
+        logoutFun()
         setIsProfileOpen(false)
-        router.push(logoutUrl)
-        
     }
-
     
     const count = useAppSelector(state => state.value)
     

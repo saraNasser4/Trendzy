@@ -5,10 +5,9 @@ import { IoIosClose, IoIosMenu } from "react-icons/io";
 import Link from 'next/link'
 import useWixClient from "../hooks/useWixClient";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import { useAppSelector } from "../store/hookType";
 
-export default function Menu({ setIsCartOpen }: { setIsCartOpen: React.FC}) {
+export default function Menu({ logoutFun, setIsCartOpen }: { logoutFun: ()=> void, setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   const wixClient = useWixClient()
   const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
   
@@ -24,14 +23,9 @@ export default function Menu({ setIsCartOpen }: { setIsCartOpen: React.FC}) {
   const listMap = listItems.map((itemObj, index)=> <Link onClick={()=> setIsMenueOpen(false)} key={index} href={itemObj.link} className={listStyle}>{itemObj.item}</Link>)
   const [isMenuOpen, setIsMenueOpen] = useState(false)
   
-  
-  const router = useRouter()
   const handleLogout = async ()=> {
-    const { logoutUrl} = await wixClient.auth.logout(window.location.href)
-    Cookies.remove("refreshToken")
-    setIsMenueOpen(false)
-    router.push(logoutUrl)
-    
+    logoutFun()
+    setIsMenueOpen(false)    
   }
 
   const handleViewCart = ()=> {
