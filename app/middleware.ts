@@ -1,6 +1,5 @@
 import { createClient, OAuthStrategy } from "@wix/sdk";
 import { NextRequest, NextResponse } from "next/server";
-// import wixServer from "./lib/wixServer";
 
 export async function middleware (request:NextRequest) {
     const cookies = request.cookies
@@ -13,7 +12,7 @@ export async function middleware (request:NextRequest) {
     })
 
 
-    const tokens = await wixClient.auth
+    await wixClient.auth
         .generateVisitorTokens()
         .then((tokens)=> {
             res.cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), { maxAge: 60 * 60 * 24 })
