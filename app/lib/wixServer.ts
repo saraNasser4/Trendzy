@@ -10,8 +10,9 @@ export default async function wixServer() {
 
     try {
         const cookieStore = await cookies()
-        refreshToken = JSON.parse(cookieStore.get("refreshToken")?.value || '{}')
-        accessToken = JSON.parse(cookieStore.get("accessToken")?.value || '{}')
+        refreshToken = cookieStore.get("refreshToken")?.value || '{}'
+        accessToken = cookieStore.get("accessToken")?.value || '{}'
+
     } catch(err) {
         console.error('cookies error for server', err)
     }
