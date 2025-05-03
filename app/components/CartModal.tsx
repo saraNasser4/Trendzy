@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from 'react'
-import useWixClient from '../hooks/useWixClient'
+import { wixClient } from "../lib/wixClient"
 import Items from './Items'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '../store/hookType'
@@ -10,7 +10,6 @@ import { IoIosClose } from 'react-icons/io'
 
 
 export default function CartModal({ setIsCartOpen }: { setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
-  const wixClient = useWixClient()
   const dispatch = useAppDispatch()
   const count = useAppSelector(state => state.value)
   

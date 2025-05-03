@@ -3,12 +3,11 @@
 import React, { useState } from "react"
 import { IoIosClose, IoIosMenu } from "react-icons/io";
 import Link from 'next/link'
-import useWixClient from "../hooks/useWixClient";
+import { wixClient } from "../lib/wixClient"
 import Cookies from "js-cookie";
 import { useAppSelector } from "../store/hookType";
 
 export default function Menu({ logoutFun, setIsCartOpen }: { logoutFun: ()=> void, setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
-  const wixClient = useWixClient()
   const isLoggedIn = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
   
   const listStyle ="hover:text-primary text-[18px]"

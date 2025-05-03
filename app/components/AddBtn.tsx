@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import useWixClient from "../hooks/useWixClient"
+import { wixClient } from "../lib/wixClient"
 import { useAppDispatch } from "../store/hookType"
 import { incrementByAmount } from "../store/counterSlice"
 
@@ -10,7 +10,6 @@ import { incrementByAmount } from "../store/counterSlice"
 export default function AddBtn({ productId, productQuantity, variantId }: { productId: string, productQuantity: number, variantId?: string }) {
     const [inStock, setInStock] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
-    const wixClient = useWixClient()
     const dispatch = useAppDispatch()
         
     const addItem = async () => {
