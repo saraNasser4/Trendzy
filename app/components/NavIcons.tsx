@@ -3,32 +3,30 @@
 import React, { useEffect, useState } from 'react'
 import { IoBasketOutline, IoNotificationsOutline, IoPerson } from 'react-icons/io5'
 import Link from 'next/link'
-import useWixClient from '../hooks/useWixClient'
 import Cookies from 'js-cookie'
 
 import { useAppSelector } from '../store/hookType'
-import getUser from '../lib/getUser'
 import { wixClient } from '../lib/wixClient'
+import { Profile } from '../type/user'
+
+type NavIconsProps = {
+    logoutFun: ()=> void;
+    isCartOpen: boolean, 
+    setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+    // userProfile: Profile | undefined 
+}
 
 const btnStyle = 'relative cursor-pointer p-2 rounded-full transition-colors duration-200 hover:text-primary'
 
-type Profile = {
-    // user: {}
-    nickname?: string | null
-    slug?: string | null
-    photo?: { id?: string, url?: string, height?: number, width?: number, offsetX?: number | null, offsetY?: number | null }
-    cover?: { id?: string, url?: string, height?: number, width?: number, offsetX?: number | null, offsetY?: number | null }
-    title?: string | null
 
-}
-
-
-export default function NavIcons({ logoutFun, isCartOpen, setIsCartOpen }: { logoutFun: ()=> void, isCartOpen: boolean, setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
-    const [user, setUser] = useState<Profile>({})
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [isProfileOpen, setIsProfileOpen] = useState(false)
+export default function NavIcons({ logoutFun, isCartOpen, setIsCartOpen }: NavIconsProps) {
     
-       
+   
+    const [isProfileOpen, setIsProfileOpen] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [user, setUser] = useState(false)
+    // console.log(userProfile)
+    //    
     
     const handleProfile = ()=> {
         if(isCartOpen) setIsCartOpen(false)
@@ -44,28 +42,39 @@ export default function NavIcons({ logoutFun, isCartOpen, setIsCartOpen }: { log
     const handleLogout = async ()=> {
         logoutFun()
         setIsProfileOpen(false)
+        setIsLoggedIn(false)
     }
     
     const count = useAppSelector(state => state.value)
     
-    useEffect(()=> {
-        const init = async ()=> {
-            try {
-                const userInit = await getUser()
-                setUser(userInit)
-                console.log(userInit, user)
+    // useEffect(()=> {
+    //     const init = async ()=> {
+    //         try {
+    //            console.log(userProfile, user)
                 
-                const isLoggedInInit = (Cookies.get("refreshToken") && Cookies.get("accessToken") !== null ) || wixClient.auth.loggedIn()
-                setIsLoggedIn(isLoggedInInit || !!userInit)
+    //             // setIsLoggedIn(isLoggedInInit || !!userInit)
                 
-            } catch (e) {
-                console.error('Error fetching user', e)
-            }
-        }
-        init()
-    }, [user])
-    console.log(user)
-
+    //         } catch (e) {
+    //             console.error('Error fetching user', e)
+    //         }
+    //     }
+    //     init()
+    // }, [userProfile, user])
+    // console.log(user)
+    
+  useEffect(()=> {
+    if ((Cookies.get("refreshToken") && Cookies.get("accessToken") !== null) || wixClient.auth.loggedIn()) {
+        setIsLoggedIn(true)
+    }
+   
+    const getMember = async ()=> {
+      const { member } = isLoggedIn ? (await wixClient.members.getCurrentMember()) : {}
+      const userData = member
+      console.log(userData)
+      
+    }
+    getMember()
+  }, [isLoggedIn])
     return (
         <div className='hidden sm:flex gap-4 relative'>
             <button className={btnStyle}>

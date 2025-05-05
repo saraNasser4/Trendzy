@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 
 import ClientProvider from "./components/ClientProvider";
+import getUser from "./lib/getUser";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,11 +22,9 @@ export const metadata: Metadata = {
   description: "Grab all you need!",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const userProfile = await getUser()
+  console.log(userProfile,'hi')
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased w-full`}>

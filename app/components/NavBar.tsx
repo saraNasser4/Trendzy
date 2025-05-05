@@ -4,13 +4,16 @@ import Image from 'next/image'
 import Menu from './Menu'
 import SearchForm from './SearchForm'
 import NavIcons from './NavIcons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CartModal from './CartModal'
 import { wixClient } from '../lib/wixClient'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
+import { Profile } from '../type/user'
+
 
 export default function NavBar() {
+  // console.log(userProfile)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const router = useRouter()
   const logout = async ()=> {

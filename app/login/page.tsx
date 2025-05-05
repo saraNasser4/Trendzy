@@ -84,15 +84,27 @@ export default function Login() {
   
   useEffect(()=> {
     setPathName(window.location.href)
-    const checkLogin = async () => {
+    const restoreSession = async () => {
       try {
-        const isLoggedIn = wixClient.auth.loggedIn()
-        if (isLoggedIn) router.push("/")
+        const refreshToken = Cookies.get("refreshToken")
+        const accessToken = Cookies.get("accessToken")
+
+        if(refreshToken && accessToken) {
+          const tokens = {
+            refreshToken: JSON.parse(refreshToken),
+            accessToken: JSON.parse(accessToken),
+          }
+
+          wixClient.auth.setTokens(tokens)
+        }
+
+        const member = await wixClient.members?.getCurrentMember()
+        if (member) router.push("/")
       } catch (e) {
         console.error("Login check failed", e)  
       }
     }
-    checkLogin()
+    restoreSession()
   }, [router])
 
   return (
